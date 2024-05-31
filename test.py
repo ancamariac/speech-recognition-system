@@ -9,7 +9,7 @@ scaler = joblib.load('standard_scaler.pkl')
 max_length = joblib.load('max_feature_length.pkl')
 
 # Function to record audio
-def record_audio(duration=40, fs=44100):
+def record_audio(duration=5, fs=44100):
     print("Recording audio...")
     audio = sd.rec(int(duration * fs), samplerate=fs, channels=1)
     sd.wait()  # Wait until recording is finished

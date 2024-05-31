@@ -55,9 +55,9 @@ def pad_or_trim_features(features, target_length):
     return padded_features
 
 # Load and preprocess audio data for training (replace with your own file paths)
-speaker1_files = ['anca1.wav', 'anca2.wav']  # Add more files for speaker1
-speaker2_files = ['oana1.wav', 'oana3.wav']  # Add more files for speaker2
-speaker3_files = ['bogdan1.wav', 'bogdan2.wav']  # Add more files for speaker3
+speaker1_files = ['voices/anca1.wav', 'voices/anca2.wav', 'voices/anca3.wav']  # Add more files for speaker1
+speaker2_files = ['voices/malina1.wav', 'voices/malina2.wav', 'voices/malina3.wav']  # Add more files for speaker2
+speaker3_files = ['voices/sample1.wav', 'voices/sample2.wav', 'voices/sample3.wav']  # Add more files for speaker3
 
 speaker1_audio = load_audio_files(speaker1_files)
 speaker2_audio = load_audio_files(speaker2_files)
@@ -96,3 +96,22 @@ joblib.dump(scaler, 'standard_scaler.pkl')
 joblib.dump(max_length, 'max_feature_length.pkl')
 
 print("Model, scaler, and feature length saved successfully.")
+
+# Load and preprocess audio data for testing (replace with your own file paths)
+unknown_speaker_files = ['anca3.wav']  # Add files for unknown speaker
+unknown_speaker_audio = load_audio_files(unknown_speaker_files)
+unknown_speaker_features = extract_features(unknown_speaker_audio)
+
+# Pad or trim features to have the same shape as the features used for training
+unknown_speaker_features = pad_or_trim_features(unknown_speaker_features, max_length)
+
+# Standardize features
+X_test = scaler.transform(np.array(unknown_speaker_features))
+
+# Predict labels for unknown speaker
+y_pred = clf.predict(X_test)
+
+# Print predicted labels
+print("Predicted labels for unknown speaker:")
+for i, label in enumerate(y_pred):
+    print(f"File: {unknown_speaker_files[i]}, Predicted Label: {label}")
